@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> words5letters = new ArrayList<>();
     private ArrayList<String> words4letters = new ArrayList<>();
     private ArrayList<String> words3letters = new ArrayList<>();
-    ArrayList<LetterTile> letters = new ArrayList<>();
+
     private Random random = new Random();
 
     @Override
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         TextView status = (TextView) findViewById(R.id.gameStatus);
         status.setText("Game Started");
         GridView letterGrid = (GridView) findViewById(R.id.letterGrid);
+        ArrayList<LetterTile> letters = new ArrayList<>();
         String[] wordsToPutInGrid = new String[6];
         for(int i=0; i<3; i++) {
             wordsToPutInGrid[i] = words5letters.get(random.nextInt(words5letters.size()));
@@ -83,7 +84,9 @@ public class MainActivity extends AppCompatActivity {
             letters.add(new LetterTile(this, wordsToPutInGrid[5].charAt(j)));
         }
         Collections.shuffle(letters);
+
         letterGrid.setAdapter(new GridAdapter(this, letters));
+
         return true;
     }
 
