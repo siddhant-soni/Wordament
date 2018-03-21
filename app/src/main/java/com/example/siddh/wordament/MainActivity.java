@@ -2,11 +2,14 @@ package com.example.siddh.wordament;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -29,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> words5letters = new ArrayList<>();
     private ArrayList<String> words4letters = new ArrayList<>();
     private ArrayList<String> words3letters = new ArrayList<>();
-
+    public static int count=0;
     private Random random = new Random();
 
     @Override
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         TextView status = (TextView) findViewById(R.id.gameStatus);
         status.setText("Game Started");
         GridView letterGrid = (GridView) findViewById(R.id.letterGrid);
+        //letterGrid.seListener();
         ArrayList<LetterTile> letters = new ArrayList<>();
         String[] wordsToPutInGrid = new String[6];
         for(int i=0; i<3; i++) {
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public static final class GridAdapter extends BaseAdapter {
+    public final class GridAdapter extends BaseAdapter {
         private ArrayList<LetterTile> mLetters;
 
         private Context mContext;
@@ -117,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
         public View getView(final int position, final View convertView, final ViewGroup parent) {
 
             LetterTile view = mLetters.get(position);
+            view.setOnDragListener(new DragListener());
 
             if (view == null) {
                 view = (LetterTile) LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
@@ -124,5 +129,34 @@ public class MainActivity extends AppCompatActivity {
 
             return view;
         }
+    }
+    private class DragListener implements View.OnDragListener {
+                @Override
+                public boolean onDrag(View view, DragEvent dragEvent) {
+                    switch (dragEvent.getAction()){
+                        case DragEvent.ACTION_DRAG_EXITED:
+                        case DragEvent.ACTION_DRAG_ENTERED:
+                            if(count<10){
+                                view.setBackgroundColor(Color.GREEN);
+                                count++;
+                                view.invalidate();
+                            }
+                            else{
+                                Toast.makeText(MainActivity.this,"Select 5 only",Toast.LENGTH_SHORT).show();
+                            }
+                            return true;
+
+
+                        case DragEvent.ACTION_DRAG_STARTED:count=0;
+                        case DragEvent.ACTION_DRAG_ENDED:
+                            view.setBackgroundColor(Color.rgb(255, 255, 200));
+                            view.invalidate();
+                            return true;
+
+
+                    }
+                    return false;
+                }
+
     }
 }

@@ -31,4 +31,17 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
         setTextSize(30);
         setBackgroundColor(Color.rgb(255, 255, 200));
     }
+    public boolean onTouchEvent(MotionEvent motionEvent) {
+        if(!frozen){
+            if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
+                startDrag(ClipData.newPlainText("",""),new View.DragShadowBuilder(null),this,0);
+                return true;
+            }
+        }
+        else
+            return super.onTouchEvent(motionEvent);
+        return super.onTouchEvent(motionEvent);
+    }
+
+
 }
