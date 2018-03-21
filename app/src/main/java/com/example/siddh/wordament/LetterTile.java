@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ import android.widget.GridView;
 
 public class LetterTile extends android.support.v7.widget.AppCompatTextView {
     public static final int TILE_SIZE = 150;
-    private Character letter;
+    public Character letter;
     private boolean frozen;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
@@ -34,7 +35,7 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if(!frozen){
             if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
-                startDrag(ClipData.newPlainText("",""),new View.DragShadowBuilder(null),this,0);
+                startDrag(ClipData.newPlainText("",""),new View.DragShadowBuilder(),this,0);
                 return true;
             }
         }

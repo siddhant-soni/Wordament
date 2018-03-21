@@ -7,6 +7,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,6 +25,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> words5letters = new ArrayList<>();
     private ArrayList<String> words4letters = new ArrayList<>();
     private ArrayList<String> words3letters = new ArrayList<>();
+    private Stack<LetterTile> selected_word = new Stack<>();
     public static int count=0;
     private Random random = new Random();
 
@@ -133,27 +136,24 @@ public class MainActivity extends AppCompatActivity {
     private class DragListener implements View.OnDragListener {
                 @Override
                 public boolean onDrag(View view, DragEvent dragEvent) {
+                    LetterTile tile = (LetterTile) view;
                     switch (dragEvent.getAction()){
-                        case DragEvent.ACTION_DRAG_EXITED:
                         case DragEvent.ACTION_DRAG_ENTERED:
-                            if(count<10){
-                                view.setBackgroundColor(Color.GREEN);
-                                count++;
-                                view.invalidate();
-                            }
-                            else{
-                                Toast.makeText(MainActivity.this,"Select 5 only",Toast.LENGTH_SHORT).show();
-                            }
+                            Log.i("MyInfoMain", "Entered " + tile.letter);
+                            tile.setBackgroundColor(Color.GREEN);
+                            tile.invalidate();
                             return true;
-
-
-                        case DragEvent.ACTION_DRAG_STARTED:count=0;
+                        case DragEvent.ACTION_DRAG_EXITED:
+                            Log.i("MyInfo", "Exited " + tile.letter);
+                            return true;
+                        case DragEvent.ACTION_DRAG_LOCATION:
+                            return true;
+                        case DragEvent.ACTION_DRAG_STARTED:
                         case DragEvent.ACTION_DRAG_ENDED:
-                            view.setBackgroundColor(Color.rgb(255, 255, 200));
-                            view.invalidate();
+                            Log.i("MyInfo", "Ended");
+                            tile.setBackgroundColor(Color.rgb(255, 255, 200));
+                            tile.invalidate();
                             return true;
-
-
                     }
                     return false;
                 }
