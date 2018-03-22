@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         wordsInGrid.clear();
         dict.clear();
-        score = 0;
         AssetManager assetManager = getAssets();
         try {
             InputStream inputStream = assetManager.open("words.txt");
@@ -85,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         final TextView timer = (TextView) findViewById(R.id.timer);
         status = (TextView) findViewById(R.id.gameStatus);
         status.setText("Game Started");
+        score = 0;
         final GridView letterGrid = (GridView) findViewById(R.id.letterGrid);
-        //letterGrid.seListener();
         ArrayList<LetterTile> letters = new ArrayList<>();
         String[] wordsToPutInGrid = new String[4];
         for(int i=0; i<2; i++) {
@@ -192,8 +191,8 @@ public class MainActivity extends AppCompatActivity {
                             tile.setBackgroundColor(Color.rgb(255, 255, 255));
                             tile.invalidate();
                             if(isGoodWord(selected_word)) {
-                                score++;
-                                status.setText("Score : "+score);
+                                score += selected_word.size();
+                                status.setText("Score : "+ score);
                             }
                             return true;
                         case DragEvent.ACTION_DROP:
@@ -214,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 buffer.append(selected_word.pop().letter);
             }
             if(dict.contains(buffer.reverse().toString())) {
+                score += buffer.length();
                 return true;
             } else {
                 status.setText("Score : " + score);
