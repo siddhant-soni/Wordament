@@ -9,6 +9,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,9 +18,9 @@ import android.view.ViewParent;
 import android.widget.GridView;
 
 public class LetterTile extends android.support.v7.widget.AppCompatTextView {
-    public static final int TILE_SIZE = 200;
+    public static final int TILE_SIZE = 150;
     public Character letter;
-    private boolean frozen;
+    private boolean frozen = false;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public LetterTile(Context context, Character letter) {
@@ -31,7 +32,7 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
         setWidth(TILE_SIZE);
         setTextSize(30);
         setPadding(10,10,10,10);
-        setBackgroundColor(Color.rgb(255, 255, 200));
+        setBackgroundColor(Color.rgb(255, 255, 255));
     }
     public boolean onTouchEvent(MotionEvent motionEvent) {
         if(!frozen){
