@@ -35,21 +35,22 @@ public class MainActivity extends AppCompatActivity {
     private static boolean[][] visited;
     private static final int MIN_WORD_LENGTH = 3;
 //    private static final int MAX_WORD_LENGTH = 5;
-    private ArrayList<String> words5letters = new ArrayList<>();
-    private ArrayList<String> words4letters = new ArrayList<>();
-    private ArrayList<String> words3letters = new ArrayList<>();
+    private static ArrayList<String> words5letters = new ArrayList<>();
+    private static ArrayList<String> words4letters = new ArrayList<>();
+    private static ArrayList<String> words3letters = new ArrayList<>();
     private static HashSet<String> dict = new HashSet<>();
-    private Stack<LetterTile> selected_word = new Stack<>();
+    private static Stack<LetterTile> selected_word = new Stack<>();
     public static ArrayList<String> wordsInGrid = new ArrayList<>();
     public static int count=0;
-    private static Character[][] grid = new Character[5][5];
-    private Random random = new Random();
+    private static Character[][] grid = new Character[4][4];
+    private static Random random = new Random();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 //        GridView grid = (GridView) findViewById(R.id.letterGrid);
+        wordsInGrid.clear();
         AssetManager assetManager = getAssets();
         try {
             InputStream inputStream = assetManager.open("words.txt");
@@ -83,27 +84,27 @@ public class MainActivity extends AppCompatActivity {
         final GridView letterGrid = (GridView) findViewById(R.id.letterGrid);
         //letterGrid.seListener();
         ArrayList<LetterTile> letters = new ArrayList<>();
-        String[] wordsToPutInGrid = new String[6];
-        for(int i=0; i<3; i++) {
-            wordsToPutInGrid[i] = words5letters.get(random.nextInt(words5letters.size()));
-            for(int j=0; j<5; j++) {
+        String[] wordsToPutInGrid = new String[4];
+        for(int i=0; i<2; i++) {
+            wordsToPutInGrid[i] = words4letters.get(random.nextInt(words4letters.size()));
+            for(int j=0; j<4; j++) {
                 letters.add(new LetterTile(this, wordsToPutInGrid[i].charAt(j)));
             }
         }
-        for(int i=3; i<5; i++){
+        for(int i=2; i<3; i++){
             wordsToPutInGrid[i] = words3letters.get(random.nextInt(words3letters.size()));
             for(int j=0; j<3; j++){
                 letters.add(new LetterTile(this, wordsToPutInGrid[i].charAt(j)));
             }
         }
-        wordsToPutInGrid[5] = words4letters.get(random.nextInt(words4letters.size()));
-        for(int j=0; j<4; j++){
-            letters.add(new LetterTile(this, wordsToPutInGrid[5].charAt(j)));
+        wordsToPutInGrid[3] = words5letters.get(random.nextInt(words5letters.size()));
+        for(int j=0; j<5; j++){
+            letters.add(new LetterTile(this, wordsToPutInGrid[3].charAt(j)));
         }
         Collections.shuffle(letters);
         int s = letters.size();
-        for(int i=0;i<5;i++) {
-            for(int j=0;j<5;j++) {
+        for(int i=0;i<4;i++) {
+            for(int j=0;j<4;j++) {
                 grid[i][j] = letters.get(s-1).letter;
                 s--;
             }
@@ -111,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
         letterGrid.setAdapter(new GridAdapter(this, letters));
 
-        new CountDownTimer(30000, 1000) {
+        new CountDownTimer(10000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 timer.setText("Time left: " + millisUntilFinished / 1000);
@@ -120,11 +121,12 @@ public class MainActivity extends AppCompatActivity {
             public void onFinish() {
                 Log.i("HI", "Done");
                 timer.setText("done!");
-//                Intent intent = new Intent(getApplicationContext(), FinishGameActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FinishGameActivity.class);
                 findAllWords();
                 Log.i("MyInfo", "Finished");
-//                intent.putExtra("LIST_OF_WORDS", wordsInGrid);
-//                startActivity(intent);
+                intent.putExtra("LIST_OF_WORDS", wordsInGrid);
+                startActivity(intent);
+                finish();
             }
         }.start();
 
@@ -211,6 +213,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         if (visited[i][j] == true) {
+            return;
+        }
+        if(buffer.length() >= 5){
             return;
         }
         visited[i][j] = true;

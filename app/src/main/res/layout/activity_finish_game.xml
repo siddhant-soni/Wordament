@@ -13,7 +13,8 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="66dp"
-        android:text="Start" />
+        android:text="Start"
+        android:onClick="newGame"/>
 
     <ListView
         android:id="@+id/wordList"
