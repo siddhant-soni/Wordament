@@ -1,9 +1,11 @@
 package com.example.siddh.wordament;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -24,18 +26,23 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity {
 
-//    private static final int MIN_WORD_LENGTH = 3;
+    private static boolean[][] visited;
+    private static final int MIN_WORD_LENGTH = 3;
 //    private static final int MAX_WORD_LENGTH = 5;
     private ArrayList<String> words5letters = new ArrayList<>();
     private ArrayList<String> words4letters = new ArrayList<>();
     private ArrayList<String> words3letters = new ArrayList<>();
+    private static HashSet<String> dict = new HashSet<>();
     private Stack<LetterTile> selected_word = new Stack<>();
+    public static ArrayList<String> wordsInGrid = new ArrayList<>();
     public static int count=0;
+    private static Character[][] grid = new Character[5][5];
     private Random random = new Random();
 
     @Override
@@ -50,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
             String line;
             while((line = in.readLine()) != null) {
                 String word = line.trim();
+                if(word.length() >= MIN_WORD_LENGTH)
+                    dict.add(word);
                 if(word.length() == 3) {
                     words3letters.add(word);
                 }
@@ -68,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public boolean onStartGame(View view) {
+        final TextView timer = (TextView) findViewById(R.id.timer);
         TextView status = (TextView) findViewById(R.id.gameStatus);
         status.setText("Game Started");
-        GridView letterGrid = (GridView) findViewById(R.id.letterGrid);
+        final GridView letterGrid = (GridView) findViewById(R.id.letterGrid);
         //letterGrid.seListener();
         ArrayList<LetterTile> letters = new ArrayList<>();
         String[] wordsToPutInGrid = new String[6];
@@ -91,8 +101,32 @@ public class MainActivity extends AppCompatActivity {
             letters.add(new LetterTile(this, wordsToPutInGrid[5].charAt(j)));
         }
         Collections.shuffle(letters);
+        int s = letters.size();
+        for(int i=0;i<5;i++) {
+            for(int j=0;j<5;j++) {
+                grid[i][j] = letters.get(s-1).letter;
+                s--;
+            }
+        }
 
         letterGrid.setAdapter(new GridAdapter(this, letters));
+
+        new CountDownTimer(30000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                timer.setText("Time left: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                Log.i("HI", "Done");
+                timer.setText("done!");
+//                Intent intent = new Intent(getApplicationContext(), FinishGameActivity.class);
+                findAllWords();
+                Log.i("MyInfo", "Finished");
+//                intent.putExtra("LIST_OF_WORDS", wordsInGrid);
+//                startActivity(intent);
+            }
+        }.start();
 
         return true;
     }
@@ -158,5 +192,41 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
 
+    }
+
+    public static void findAllWords() {
+        Log.i("HI", "Inside findallwords");
+        visited = new boolean[grid.length][grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                StringBuffer buffer = new StringBuffer();
+                searchword(i, j, buffer);
+            }
+        }
+    }
+
+    private static void searchword(int i, int j, StringBuffer buffer) {
+        Log.i("HI", "insidesearchword");
+        if (i < 0 || j < 0 || i > grid.length - 1 || j > grid[i].length - 1) {
+            return;
+        }
+        if (visited[i][j] == true) {
+            return;
+        }
+        visited[i][j] = true;
+        buffer.append(grid[i][j]);
+        System.out.println(buffer.toString());
+        if (dict.contains(buffer.toString())) {
+            //list out all the words
+            Log.i("Found :", buffer.toString());
+            wordsInGrid.add(buffer.toString());
+        }
+        for (int k = i - 1; k <= i + 1; k++) {
+            for (int l = j - 1; l <= j + 1; l++) {
+                searchword(k, l, buffer);
+            }
+        }
+        buffer.deleteCharAt(buffer.length() - 1);
+        visited[i][j] = false;
     }
 }

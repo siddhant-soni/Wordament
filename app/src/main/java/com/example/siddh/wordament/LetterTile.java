@@ -17,7 +17,7 @@ import android.view.ViewParent;
 import android.widget.GridView;
 
 public class LetterTile extends android.support.v7.widget.AppCompatTextView {
-    public static final int TILE_SIZE = 150;
+    public static final int TILE_SIZE = 200;
     public Character letter;
     private boolean frozen;
 
@@ -30,6 +30,7 @@ public class LetterTile extends android.support.v7.widget.AppCompatTextView {
         setHeight(TILE_SIZE);
         setWidth(TILE_SIZE);
         setTextSize(30);
+        setPadding(10,10,10,10);
         setBackgroundColor(Color.rgb(255, 255, 200));
     }
     public boolean onTouchEvent(MotionEvent motionEvent) {

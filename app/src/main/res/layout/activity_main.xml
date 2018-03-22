@@ -11,8 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="33dp"
+        android:layout_marginEnd="34dp"
+        android:layout_marginRight="34dp"
+        android:layout_marginTop="31dp"
+        android:layout_toLeftOf="@+id/startBtn"
+        android:layout_toStartOf="@+id/startBtn"
         android:text="Hello World!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -33,7 +36,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/gameStatus"
-        android:layout_above="@+id/startBtn">
+        android:layout_above="@+id/startBtn"
+        android:id="@+id/relativeLayout">
 
         <GridView
             android:id="@+id/letterGrid"
@@ -41,5 +45,16 @@
             android:layout_height="match_parent"
             android:numColumns="5"/>
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relativeLayout"
+        android:layout_marginLeft="37dp"
+        android:layout_marginStart="37dp"
+        android:layout_toEndOf="@+id/startBtn"
+        android:layout_toRightOf="@+id/startBtn"
+        android:text="Time left :" />
 
 </RelativeLayout>
