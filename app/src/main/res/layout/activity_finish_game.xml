@@ -11,10 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="66dp"
-        android:text="Start"
-        android:onClick="newGame"/>
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginStart="45dp"
+        android:onClick="newGame"
+        android:text="New Game" />
 
     <ListView
         android:id="@+id/wordList"
@@ -24,4 +27,16 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/startBtn"
+        android:layout_alignBottom="@+id/startBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="62dp"
+        android:layout_marginRight="62dp"
+        android:text="Score :  0" />
 </RelativeLayout>

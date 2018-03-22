@@ -16,7 +16,7 @@
         android:layout_marginTop="31dp"
         android:layout_toLeftOf="@+id/startBtn"
         android:layout_toStartOf="@+id/startBtn"
-        android:text="Hello World!"
+        android:text="Welcome!"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
